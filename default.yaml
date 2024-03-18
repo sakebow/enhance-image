@@ -5,13 +5,14 @@ config: # dict type
   deal: 2 # how many times for adjustion of color and gauss noise
   epoch: 1
   noise:
-    type: 'gauss'
-    upper: 15
-    lower: 1
+    type: 'gauss' # now only support gauss
+    upper: 15 # upper bound
+    lower: 1 # lower bound
   saturation:
-    upper: 100
-    lower: 1
+    upper: 100 # upper bound
+    lower: 1 # lower bound
 operations: # list type - how many operations allowed
+# now only support rotate and flip below
   - 'rotate_90'
   - 'rotate_180'
   - 'rotate_270'

@@ -21,3 +21,36 @@
 - [x] 参数可配置
   - [x] 使用`yaml`文件参数配置参数
   - [x] 通过创建对象的时候传值进行初始化
+
+# 使用
+
+```shell
+$ pip install -r requirements.txt
+$ python dataloader.py
+```
+
+# 自定义
+
+## 源码自定义
+
+如果你需要修改源码以适配自己的工具，那就直接引用`dataloader.py`，并初始化`DataLoader`对象。
+
+其中需要自定义的参数包括：
+
+| 参数名 | 说明 |
+| --- | --- |
+| `yaml_path` | 配置文件所在目录，这里有一个默认的`default.yaml` |
+| `size` | 图片预期大小，这里默认是320 |
+| `batch` | 每次处理的图片数量，这里默认是4 |
+| `deal` | 每次修改噪声、修改对比度的数量，这里默认是5 |
+| `epoch` | 处理多少次，这里默认是1000 |
+| `noise_upper` | 噪声最大值，这里默认是15 |
+| `noise_lower` | 噪声最小值，这里默认是1 |
+| `saturation_upper` | 修改亮度最大值，这里默认是100 |
+| `saturation_lower` | 修改亮度最小值，这里默认是1 |
+
+## 文件自定义
+
+如果你需要修改配置文件，那就直接修改`default.yaml`文件。
+
+最好是复制一份`default.yaml`，并命名为`mu.yaml`或者什么的，并修改需要自定义的参数，然后在`dataloader.py`中传入你的配置文件路径即可。
