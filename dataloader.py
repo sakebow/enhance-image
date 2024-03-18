@@ -1,11 +1,12 @@
 import os, cv2, yaml, math
 import numpy as np
+from tqdm import trange
 
 from reinforce import ReinforceFactory
 
 class DataLoader:
-    def __init__(self, yaml_path, size = 320, batch = 4, deal = 5, epoch = 1000, noise_upper = 15, noise_lower = 1,
-                 saturation_upper = 100, saturation_lower = 1):
+    def __init__(self, yaml_path = './default.yaml', size = 320, batch = 4, deal = 5, epoch = 1000, noise_upper = 15,
+                 noise_lower = 1, saturation_upper = 100, saturation_lower = 1):
         """
         @function: data loader
         @param
@@ -229,7 +230,7 @@ class DataLoader:
     def run_epochs(self):
         noise_strengths = np.random.choice([i / 100. for i in range(self.noise_lower, self.noise_upper)], self.deal)
         saturations = np.random.choice([i * 1. for i in range(self.saturation_lower, self.saturation_upper)], self.deal)
-        for epoch in range(self.epoch):
+        for epoch in trange(self.epoch):
             for noise, saturation in zip(noise_strengths, saturations):
                 image, label = self.random_choose_images(self.get_input_image_path())
                 self.save_transform(
