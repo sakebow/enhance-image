@@ -24,9 +24,17 @@
 
 # 使用
 
+## 源码使用
+
 ```shell
 $ pip install -r requirements.txt
 $ python dataloader.py
+```
+
+## 安装包使用
+
+```shell
+$ pip install sakebow-enhancer
 ```
 
 # 自定义
@@ -54,3 +62,8 @@ $ python dataloader.py
 如果你需要修改配置文件，那就直接修改`default.yaml`文件。
 
 最好是复制一份`default.yaml`，并命名为`mu.yaml`或者什么的，并修改需要自定义的参数，然后在`dataloader.py`中传入你的配置文件路径即可。
+
+# 目前的Bug
+
+- [ ] 不支持`Windows`系统中带有空格的文件路径
+- [ ] 有待发现...

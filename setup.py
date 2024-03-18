@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name='dataloader',
+    name='sakebow-enhancer',
     version="0.0.2",
     description='enhance datasets with rotate, flip and adjustion with color and noise',
     keywords='enhance datasets',
