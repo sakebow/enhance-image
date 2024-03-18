@@ -1,0 +1,25 @@
+config: # dict type
+  size: 320 # image size
+  batch: 4 # how many images to combine into one
+  type: 'yolo'
+  deal: 2 # how many times for adjustion of color and gauss noise
+  epoch: 1
+  noise:
+    type: 'gauss'
+    upper: 15
+    lower: 1
+  saturation:
+    upper: 100
+    lower: 1
+operations: # list type - how many operations allowed
+  - 'rotate_90'
+  - 'rotate_180'
+  - 'rotate_270'
+  - 'flip_x'
+  - 'flip_y'
+input: # dict type - input path
+  image: 'images'
+  label: 'labels'
+output: # dict type - output path
+  image: 'output/images'
+  label: 'output/labels'
