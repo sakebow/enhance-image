@@ -61,7 +61,50 @@ $ pip install sakebow-enhancer
 
 如果你需要修改配置文件，那就直接修改`default.yaml`文件。
 
-最好是复制一份`default.yaml`，并命名为`mu.yaml`或者什么的，并修改需要自定义的参数，然后在`dataloader.py`中传入你的配置文件路径即可。
+最好是复制一份`default.yaml`，并命名为`my.yaml`或者什么的，并修改需要自定义的参数，然后在`dataloader.py`中传入你的配置文件路径即可。
+
+## 最佳使用方式
+
+目前虽然打成`sakebow-enhancer`包，但是目前只支持`Linux`系统，`Windows`系统下存在编码问题。
+
+所以，最推荐的使用方式就是下载源码使用。需要如下组织源码的目录结构：
+
+```txt
+your_dataset_dir/
+|
+|- images/ # 图片所在目录
+|  |- image1.jpg
+|  |- ...
+|- labels/ # 标签所在目录
+|  |- label1.txt
+|  |- ...
+|- output/ # 输出目录
+|  |- images/ # 输出图片所在目录（空文件夹）
+|  |- labels/ # 输出标签所在目录（空文件夹）
+|- my.yaml（或者default.yaml） # 配置文件
+|- dataloader.py # 源码中的必要文件
+|- reinforce.py # 源码中的必要文件
+```
+
+按照上述结构组织文件后，你可以直接编辑`my.yaml`文件，然后执行`python dataloader.py`即可。
+
+又或者，你可以自行创建`my-runner.py`或者`my-runner.ipynb`文件。文件内容如下：
+
+```python
+import dataloader
+"""
+dataloader.DataLoader所有的参数都有默认值。
+如果你保持`default.yaml`文件，那么你可以直接使用`myloader = dataloader.DataLoader()`。
+如果你想要修改参数，你可以直接传入`myloader = dataloader.DataLoader(yaml_path = "my.yaml")`。
+"""
+myloader = dataloader.DataLoader(yaml_path = "my.yaml")
+myloader.run_epochs()
+```
+
+执行就行了。其实不难发现，这段代码就是`dataloader.py`文件中的`main`函数内容。
+
+所以，当你修改好了`default.yaml`文件后，你可以直接执行`python dataloader.py`
+
 
 # 目前的Bug
 
