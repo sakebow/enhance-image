@@ -382,4 +382,6 @@ labels
 images/*
 output/*
 labels/*
+kk
+seg
 # End of https://www.gitignore.io/api/python,pycharm+all,eclipse,visualstudiocode,sublimetext,vim.macos
