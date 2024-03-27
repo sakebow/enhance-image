@@ -6,7 +6,7 @@ class ReinforceFactory:
     self.image = image.copy()
   def add_noise(self, strength = 5e-2):
     # 添加随机噪声
-    assert 0 <= strength <= 1
+    assert 0 <= strength <= 1, "strength must be between 0 and 1"
     row, col, ch = self.image.shape
     gauss = np.random.randn(row, col, ch)
     gauss = gauss.reshape(row, col, ch)
@@ -15,7 +15,7 @@ class ReinforceFactory:
     return self
   def adjust_colors(self, saturation = 15):
     # 饱和度在0到100之间
-    assert 0 <= saturation <= 100
+    assert 0 <= saturation <= 100, "saturation must be between 0 and 100"
     # 调整色彩
     hsv = cv2.cvtColor(self.image, cv2.COLOR_BGR2HSV)
     hue, sat, val = cv2.split(hsv)

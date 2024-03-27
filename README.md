@@ -1,6 +1,21 @@
 # 图像增强
 
-主要是将多个图片组合成一个大图片，适用于图片较小的情况，比如数字水印中的文字图片、一些自制的256x256的图片等。
+重构了整个代码，在适配矩形框识别的基础上，支持了语义分割。
+
+考虑使用难度，删除了依靠类创建图像增强工具包的方法，直接使用`yaml`文件构建工具包。（~~主要是参数太多了懒得写了~~）
+
+重构后的代码主要适用于将多个图片组成一个大图片，适合图片中有一个部分是标签的情况，但并不适合整个图片作为一个标签的情况。
+
+所以，适用于：
+
+- [x] 遥感影像
+- [x] 目标识别
+- [x] 语义分割
+- [ ] ......
+
+但是目前并不适用于：
+
+- [ ] 数字水印
 
 # 功能
 
@@ -28,10 +43,10 @@
 
 ```shell
 $ pip install -r requirements.txt
-$ python dataloader.py
+$ python sakebow-enhancer.py
 ```
 
-## 安装包使用
+## ~~安装包使用（并不是Github最新版）~~
 
 ```shell
 $ pip install sakebow-enhancer
@@ -39,35 +54,13 @@ $ pip install sakebow-enhancer
 
 # 自定义
 
-## 源码自定义
+## 目录结构
 
-如果你需要修改源码以适配自己的工具，那就直接引用`dataloader.py`，并初始化`DataLoader`对象。
+在执行之前，最好按照如下方式固定文件夹。
 
-其中需要自定义的参数包括：
+当然，如果你觉得你对你的相对路径能力具有绝对的自信，可以通过修改配置文件的方式解决。同样的，你对`Windows`的编码问题相当熟悉，也可以直接在配置文件中用`\\`代替`/`。
 
-| 参数名 | 说明 |
-| --- | --- |
-| `yaml_path` | 配置文件所在目录，这里有一个默认的`default.yaml` |
-| `size` | 图片预期大小，这里默认是320 |
-| `batch` | 每次处理的图片数量，这里默认是4 |
-| `deal` | 每次修改噪声、修改对比度的数量，这里默认是5 |
-| `epoch` | 处理多少次，这里默认是1000 |
-| `noise_upper` | 噪声最大值，这里默认是15 |
-| `noise_lower` | 噪声最小值，这里默认是1 |
-| `saturation_upper` | 修改亮度最大值，这里默认是100 |
-| `saturation_lower` | 修改亮度最小值，这里默认是1 |
-
-## 文件自定义
-
-如果你需要修改配置文件，那就直接修改`default.yaml`文件。
-
-最好是复制一份`default.yaml`，并命名为`my.yaml`或者什么的，并修改需要自定义的参数，然后在`dataloader.py`中传入你的配置文件路径即可。
-
-## 最佳使用方式
-
-目前虽然打成`sakebow-enhancer`包，但是目前只支持`Linux`系统，`Windows`系统下存在编码问题。
-
-所以，最推荐的使用方式就是下载源码使用。需要如下组织源码的目录结构：
+显然，我没有自信，所以我推荐大家这样组织目录结构：
 
 ```txt
 your_dataset_dir/
@@ -81,30 +74,52 @@ your_dataset_dir/
 |- output/ # 输出目录
 |  |- images/ # 输出图片所在目录（空文件夹）
 |  |- labels/ # 输出标签所在目录（空文件夹）
-|- my.yaml（或者default.yaml） # 配置文件
-|- dataloader.py # 源码中的必要文件
-|- reinforce.py # 源码中的必要文件
+|- my.yaml # 你的配置文件（可以没有）
+"""下面都是必须存在的文件，当然也是源码默认附带的"""
+|- default.yaml
+|- datadealer.py
+|- reinforce.py
+|- sakebow-enhancer.py
+|- sakebow-enhancer-cli.py
+|- transform.py
+|- validate.py
 ```
 
-按照上述结构组织文件后，你可以直接编辑`my.yaml`文件，然后执行`python dataloader.py`即可。
+## ~~源码自定义（从0.2.0版本删除）~~
 
-又或者，你可以自行创建`my-runner.py`或者`my-runner.ipynb`文件。文件内容如下：
+## 修改配置文件 + 修改代码入口
+
+如果你需要修改配置文件，最好是复制一份`default.yaml`，并命名为`my.yaml`或者什么的，并修改需要自定义的参数，然后在`datadealer.py`中传入你的配置文件路径即可。
+
+传入路径的方式就是修改`sakebow-enhancer.py`文件，修改最后一行里`run`方法的参数：
 
 ```python
-import dataloader
-"""
-dataloader.DataLoader所有的参数都有默认值。
-如果你保持`default.yaml`文件，那么你可以直接使用`myloader = dataloader.DataLoader()`。
-如果你想要修改参数，你可以直接传入`myloader = dataloader.DataLoader(yaml_path = "my.yaml")`。
-"""
-myloader = dataloader.DataLoader(yaml_path = "my.yaml")
-myloader.run_epochs()
+run(yaml_path="my.yaml")
 ```
 
-执行就行了。其实不难发现，这段代码就是`dataloader.py`文件中的`main`函数内容。
+然后直接运行`sakebow-enhancer.py`文件：
 
-所以，当你修改好了`default.yaml`文件后，你可以直接执行`python dataloader.py`
+```shell
+$ python sakebow-enhancer.py
+```
 
+## 修改配置文件 + 命令行直接完成
+
+当然，我也明白有些人对命令行的执着。所以我也给了一个方案。
+
+首先修改你的`default.yaml`文件，然后执行如下命令：
+
+```shell
+$ python sakebow-enhancer-cli.py --yaml=my.yaml
+```
+
+## 仅修改配置文件
+
+其实不难发现，`datadealer.py`文件中的`main`函数内容也具备执行的能力。所以，还有一种非常直接的方式：直接修改`default.yaml`文件。修改好了之后，我们就直接执行：
+
+```shell
+$ python datadealer.py
+```
 
 # 目前的Bug
 

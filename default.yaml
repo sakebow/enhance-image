@@ -1,16 +1,18 @@
 config: # dict type
-  size: 320 # image size
-  batch: 4 # how many images to combine into one
-  type: 'yolo'
-  deal: 2 # how many times for adjustion of color and gauss noise
+  size: 640 # image size
+  batch: 1 # how many images to combine into one
+  # type: 'detect' # type of labels
+  type: 'segment' # now support detect and segment
+  deal: 0 # how many times for adjustion of color and gauss noise
   epoch: 1
-  noise:
-    type: 'gauss' # now only support gauss
+  noise_type: 'gauss' # now only support gauss
+noise:
+  - type: 'gauss' # guass noise
     upper: 15 # upper bound
     lower: 1 # lower bound
-  saturation:
-    upper: 100 # upper bound
-    lower: 1 # lower bound
+saturation:
+  upper: 100 # upper bound
+  lower: 1 # lower bound
 operations: # list type - how many operations allowed
 # now only support rotate and flip below
   - 'rotate_90'
@@ -19,8 +21,8 @@ operations: # list type - how many operations allowed
   - 'flip_x'
   - 'flip_y'
 input: # dict type - input path
-  image: 'images'
-  label: 'labels'
+  image: 'seg/images'
+  label: 'seg/labels'
 output: # dict type - output path
   image: 'output/images'
   label: 'output/labels'
