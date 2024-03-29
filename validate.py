@@ -17,17 +17,11 @@ def check_file(file_path):
 # 检查文件夹下的所有txt文件
 def check_folder(folder_path):
   # 获取文件夹中所有的.txt文件
-  txt_files = glob.glob(os.path.join(folder_path, '*.txt'))
+  all_txt_files = glob.glob(os.path.join(folder_path, '*.txt'))
+  # 兼容`Linux`环境下`labelImg`会额外添加一个`classes.txt`的情况
+  txt_files = [f for f in all_txt_files if not os.path.split(f)[1].split('.')[0] in ['classes']]
   for file_path in txt_files:
     result = check_file(file_path)
     if result != 1:
       return -1  # 如果发现不符合条件的文件，立即返回
   return 1  # 所有文件都符合条件
-
-if __name__ == '__main__':
-  # 设置文件夹路径
-  folder_path = '/path/to/your/folder'
-
-  # 执行检查并输出结果
-  result = check_folder(folder_path)
-  print(result)

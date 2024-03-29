@@ -384,4 +384,6 @@ output/*
 labels/*
 kk
 seg
+setup.py
+package.sh
 # End of https://www.gitignore.io/api/python,pycharm+all,eclipse,visualstudiocode,sublimetext,vim.macos

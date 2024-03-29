@@ -24,7 +24,9 @@ class DataDealer:
       self.init_with_yaml(yaml_path)
     else:
       self.init_with_yaml('default.yaml')
-    self.label_info()
+    count_check = self.label_info()
+    if count_check['count'] >= 0:
+      self.image_info()
     self.init_transform()
   def init_transform(self) -> Transform:
     self.transform = (
@@ -128,7 +130,7 @@ class DataDealer:
     else:
       count = -1
     print(f"==> label_count: {count}")
-    return { "count": count, "type": self.type }
+    return { "count": count, "type": self.type}
   
   def check_type(self):
     """
@@ -225,9 +227,3 @@ class DataDealer:
       for batch in transformed_labels:
         for labels in batch:
           label_file.write(' '.join([str(label) for label in labels]) + '\n')
-  
-if __name__ == "__main__":
-  my_data = DataDealer()
-  for epoch in range(my_data.get_epoch()):
-    image, label = my_data.random_choose_images(my_data.get_input_image_path())
-    my_data.save_transforms(idx = epoch, transformed_image = image, transformed_labels = label)
