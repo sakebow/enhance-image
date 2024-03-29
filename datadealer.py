@@ -24,6 +24,7 @@ class DataDealer:
       self.init_with_yaml(yaml_path)
     else:
       self.init_with_yaml('default.yaml')
+    self.label_info()
     self.init_transform()
   def init_transform(self) -> Transform:
     self.transform = (

@@ -54,6 +54,56 @@ $ pip install sakebow-enhancer
 
 # 自定义
 
+## 可配置项
+
+可配置项已经全部列在`default.yaml`中，包括：
+
+```yaml
+config:
+  size: 640 # 图片长宽，默认将图片更改为(640, 640)
+  batch: 1 # 需要将几张原图合为1张大图
+  type: 'detect' # 需要执行的任务。目前支持'detect'（矩形框识别）和'segment'（语义分割）
+  deal: 1 # 需要执行多少次随机增强（这个部分只包括**增加高斯噪声**与**增加饱和度**这两个选项，翻转与旋转是默认随机，不可配置）
+  epoch: 1 # 需要执行多少次随机增强（这个部分包括所有功能）
+  noise_type: 'gauss' # 噪声的类型，目前只支持高斯噪声
+noise: # 以 '-' 开头，读取将构成列表，列表内是若干包含`type`、`upper`与`lower`三个键的字典
+  - type: 'gauss'
+    upper: 15 # upper bound
+    lower: 1 # lower bound
+saturation: # 饱和度
+  upper: 100 # upper bound
+  lower: 1 # lower bound
+operations: # 支持操作列表（目前仅支持以下内容）
+  - 'rotate_90'   # 旋转90度
+  - 'rotate_180'  # 旋转180度
+  - 'rotate_270'  # 旋转270度
+  - 'flip_x'      # 水平翻转
+  - 'flip_y'      # 垂直翻转
+input: # 输入图片与标签所在目录
+  image: 'images'
+  label: 'labels'
+output: # 输出图片与标签所在目录
+  image: 'output/images'
+  label: 'output/labels'
+```
+
+## 其中有些配置需要注意
+
+### config.type
+
+需要额外强调的是，我希望用户能够**明确地知道**现在需要执行什么任务。否则，后续的识别将会出现不可预知的问题。为了实现这个目的，我设置了：
+
+```yaml
+config:
+  type: 'detect'
+```
+
+在使用`dataleader`进行读取的过程中，将监测当前输入的标签文件的格式是否符合`config.type`，并阻止标签与任务不匹配的情况。
+
+例如，我需要执行**语义分割任务**，则需要将`config.type`设置为`segment`。但是如果检测到的标签并不是`segment`，程序将报错；
+
+同样的，我需要执行**矩形框识别任务**，则需要将`config.type`设置为`detect`。
+
 ## 目录结构
 
 在执行之前，最好按照如下方式固定文件夹。
